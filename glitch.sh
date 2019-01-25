@@ -5,7 +5,6 @@ wdir="$HOME/Programming/rice/glitchlock/"
 termX=$(xdpyinfo | grep dimensions | cut -d ' ' -f7 | cut -d 'x' -f 1)
 termY=$(xdpyinfo | grep dimensions | cut -d ' ' -f7 | cut -d 'x' -f 2)
 
-icon="$wdir/icon.png"
 glitch="$wdir/glitch.py"
 glitcharr="$wdir/glitcharr.py"
 tmpbg='/tmp/screen.jpg'
@@ -44,10 +43,9 @@ if [ -z "$1" ]
 then
     scrot "$tmpbg"
     overlayText "$tmpbg"
-    drawBoxes "$tmpbg"
+    #drawBoxes "$tmpbg"
     $glitch "$tmpbg"
-    $glitcharr "$tmpbg"
-    convert "$tmpbg" "$icon" -gravity center -composite -matte "$tmpbg"
+    #$glitcharr "$tmpbg"
 fi
 
 feh "$tmpbg"

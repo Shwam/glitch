@@ -33,6 +33,3 @@ try
 while
 with
 yield
-=
-==
-!=
