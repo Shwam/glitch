@@ -17,41 +17,42 @@ def metadata(fname):
                 md['end'] = i
     return md
 
-def glitch(fname):
+def glitch(fname, glitch_rate):
 
     md = metadata(fname)
 
     out = b""
     content = None
-    processed = 0
     glitches = 0
 
     with open(fname, 'rb') as f:
         content = f.read()
         header = content[:md['start']]
         footer = content[md['end']:]
-        #content = content[md['start']:md['end']
+        content = content[md['start']:md['end']]
 
+    out += header
+    processed = len(header)
+    
     for line in content.split(b"\n"):
-        processed += len(line) + len(b"\n")
-        # keep the header data intact
-        if processed < md['start'] or processed >= md['end'] or b"\xff\xda" in line or b"\xff\xd9" in line:
-            out += line+b"\n"
-            continue
+        #print(line)
+        processed += len(line)
         if glitches < 1:
             glitches += 1
+            out += line[:10]
             continue
-        if random.random() < 0.995:
+        if random.random() < 1 - glitch_rate:
             out += line + b"\n"
         else:
             while random.choice((True,False)):
                 out += line+b"\n"
         while len(out) < processed:
             out += bytes(chr(random.randint(0,254)), "utf8")
+    out += footer
 
     with open(fname, 'wb') as f:
         f.write(out)
 
 if __name__ == "__main__":
     for i in range(1):
-        glitch(sys.argv[1])
+        glitch(sys.argv[1], 0.005)
